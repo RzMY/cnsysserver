@@ -1,0 +1,99 @@
+﻿<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-title" content="作业结果">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="screen-orientation" content="portrait">
+	<meta name="browsermode" content="application">
+	<meta name="full-screen" content="yes">
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="MobileOptimized" content="320">
+	<meta http-equiv="Cache-Control" content="no-siteapp">
+	<meta name="viewport" content="width=1280,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	<title>CNOS登录页面</title>
+	<link href="css/vendor.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+	<link href="css/login.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+</head>
+
+<body>
+	<div id="mount">
+		<div data-reactroot="">
+			<div class="_1RxfFVyy86UE1t7lqCDcGD">
+				<div class="_3CkMCIo8-RsWtcLQqsuKBh">
+					<div class="_3lr3h2hawOi8pO8fYLQcjI">CNOS登录</div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9">
+						<div>
+							<div class="mobileIcon"></div>
+							<input type="text" maxlength="11" autocomplete="off" placeholder="请输入用户名">
+							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
+						</div>
+					</div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9">
+						<div>
+							<div class="passwordIcon"></div>
+							<input type="password" autocomplete="off" placeholder="请输入6-20位密码">
+							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
+						</div>
+					</div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9"><a class="_2ZggRBvDTyawWaQQ6ambu4">登录</a></div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9">
+						<div>
+							<p class="_2owYBOfa1UIX-AfegSAhj7"><a href="">快速注册</a><span></span></p>
+							<a href="" class="_3x9qBnGOvjSE2ZmDfi1w5g">忘记密码</a>
+						</div>
+					</div>
+				</div>
+				{% module xsrf_form_html() %}
+			</div>
+		</div>
+	</div>
+	<div class="copyrights" id="links20210126">
+		<p align="center">版权所有&copy;邱宗森 202203792</p>
+	</div>
+	<script src="../static/js/jQuery.js"></script>
+	<script>
+//		window.onload = function() {
+//			var loginButton = document.querySelector("._2ZggRBvDTyawWaQQ6ambu4");
+//			var usernameInput = document.querySelector("input[type='text']");
+//			loginButton.addEventListener("click", function() {
+//				var username = usernameInput.value;
+//				alert("登录成功，欢迎回来，" + username);
+//			});
+//		}
+		$(document).ready(function(){
+			//当页面渲染完成后，执行以下代码
+			$("botton").on("click",function(){
+				var userval = $("#username").val();
+				var passval = $("#password").val();
+				if(userval == "" || passval == ""){
+					alert("用户名或密码不能为空");
+				}else{
+					// 将数据传递给后端
+					$.ajax({
+						url:'/login',
+						type:'post',
+						data:{
+							userName:userval,
+							passWord:passval,
+							_xsrf:$("input[name='_xsrf']").val()
+						},
+						success:function(data){
+							// 成功回调函数
+						},
+						error:function(data){
+							// 失败回调函数
+						}
+					})
+				}
+			})
+		})
+	</script>
+</body>
+</html>
