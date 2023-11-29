@@ -18,8 +18,8 @@
 	<meta http-equiv="Cache-Control" content="no-siteapp">
 	<meta name="viewport" content="width=1280,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
 	<title>CNOS登录页面</title>
-	<link href="css/vendor.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
-	<link href="css/login.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+	<link href="static/css/vendor.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+	<link href="static/css/login.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
 </head>
 
 <body>
@@ -31,14 +31,14 @@
 					<div class="_6vZdUKmPDGrrza0LnuXD9">
 						<div>
 							<div class="mobileIcon"></div>
-							<input type="text" maxlength="11" autocomplete="off" placeholder="请输入用户名">
+							<input type="text" id= "username" maxlength="11" autocomplete="off" placeholder="请输入用户名">
 							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
 						</div>
 					</div>
 					<div class="_6vZdUKmPDGrrza0LnuXD9">
 						<div>
 							<div class="passwordIcon"></div>
-							<input type="password" autocomplete="off" placeholder="请输入6-20位密码">
+							<input type="password" id= "password" autocomplete="off" placeholder="请输入6-20位密码">
 							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
 						</div>
 					</div>
@@ -69,7 +69,7 @@
 //		}
 		$(document).ready(function(){
 			//当页面渲染完成后，执行以下代码
-			$("botton").on("click",function(){
+			$("._2ZggRBvDTyawWaQQ6ambu4").on("click",function(){
 				var userval = $("#username").val();
 				var passval = $("#password").val();
 				if(userval == "" || passval == ""){
