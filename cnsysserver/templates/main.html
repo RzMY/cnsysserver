@@ -7,8 +7,8 @@
     <title>CNOS系统报表页面</title>
     <link rel="stylesheet" href="../static/fonts/iconfont.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
-    <script src="../static/echart/echarts.js"></script>
     <script src="../static/js/jQuery.js"></script>
+    <script src="../static/js/echarts.js"></script>
     <style>
         * {
             margin: 0;
@@ -514,7 +514,7 @@
     // 指定图表的配置项和数据
 
     // 复购率
-    var option = {
+    option = {
         title: {
             text: ''
         },
@@ -563,7 +563,7 @@
     option.series[1].data = dataFugou;
 
     // 回购率
-    var option2 = {
+    option2 = {
         title: {
             text: ''
         },
@@ -614,7 +614,7 @@
 
     // 贡献度
     
-    var option3 = {
+    option3 = {
         title: {
             text: ''
         },
@@ -722,7 +722,7 @@
 
     // 每月消费
 
-    var option4 = {
+    option4 = {
         title: {
             text: ''
         },
@@ -805,19 +805,13 @@
 
     // 购买周期
     
-    var option5 = {
+    option5 = {
         title: {
         text: "",
         left: 10
         },
-        legend: {
-            data: ['购买周期']
-        },
         toolbox: {
         feature: {
-            dataZoom: {
-            yAxisIndex: false
-            },
             saveAsImage: {
             pixelRatio: 2
             }
@@ -886,44 +880,40 @@
         option5.series[0].data = dataZhouQi;
         option5.series[1].data = dataPingJunZhouQi;
         console.log(option5.series[0].data);
-        console.log(dateID);
         console.log("test5");
 </script>
 <script>
     $(document).ready(function() {
+        var myChart = echarts.init(document.getElementById('main'));
         $('.menu-item').click(function() {
-            var myChart = null;
-            if (myChart != null && myChart != "" && myChart != undefined){
-                myChart.dispose();
-            }
             var myChart = echarts.init(document.getElementById('main'));
             var target = $(this).data('target');
+            console.log(myChart.isDisposed)
             console.log(target);
             console.log(myChart);
             switch(target) {
                 case 'main':
-                    myChart.setOption(option);
+                    myChart.setOption(option, true);
                     break;
                 case 'main2':
-                    myChart.setOption(option2);
+                    myChart.setOption(option2, true);
                     break;
                 case 'main3':
-                    myChart.setOption(option3);
+                    myChart.setOption(option3, true);
                     break;
                 case 'main4':
-                    myChart.setOption(option4);
+                    myChart.setOption(option4, true);
                     break;
                 case 'main5':
-                    myChart.setOption(option5);
+                    myChart.setOption(option5, true);
                     break;
                 default:
                     // 默认操作
                     break;
             }
         });
-
         // 默认渲染复购率的echarts报表
-        $('.menu-item[data-target="main5"]').click();
+        $('.menu-item[data-target="main1"]').click();
     });
 </script>
 <script>
