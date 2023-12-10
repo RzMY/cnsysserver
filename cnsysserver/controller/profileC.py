@@ -1,5 +1,6 @@
 # 个人信息维护
 import tornado.web
+import os
 from conf.base import BaseHandler,EnterHandler
 
 class ProfileHandler(BaseHandler):
@@ -47,14 +48,31 @@ class ProfileHandler(BaseHandler):
         kwages["realname"] = info[3]
         kwages["age"] = info[4]
         kwages["phone"] = info[5]
+        
         # 将前台数据更新到数据库
         uRealName = self.get_argument("realName", default = kwages['realname'], strip=True)
         uAge = self.get_argument("age", default = kwages['age'], strip=True)
         uPhone = self.get_argument("phone", default = kwages['phone'], strip=True)
+        
+        # 处理上传的头像文件
+        avatar = self.request.files.get('avatar')
+        if avatar:
+            avatar = avatar[0]
+            # 获取原始文件的扩展名
+            _, ext = os.path.splitext(avatar['filename'])
+            # 生成新的文件名
+            avatar_filename = 'avatar_' + kwages["username"] + ext
+            avatar_path = os.path.join('static/images', avatar_filename)
+            with open(avatar_path, 'wb') as f:
+                f.write(avatar['body'])
+            # 更新头像URL
+            avatar_url = '../' + avatar_path
+        else:
+            avatar_url = info[6]  # 使用旧的头像URL
         sql = \
             """
             UPDATE user_info
-            SET real_name = %s, age = %s, phone_number = %s
+            SET real_name = %s, age = %s, phone_number = %s, avatar_url = %s
             WHERE username = %s
             """
         if uRealName == "":
@@ -64,7 +82,7 @@ class ProfileHandler(BaseHandler):
         if uPhone == "":
             uPhone = kwages['phone']
             
-        affected_rows = self.cursor.execute(sql, (uRealName, uAge, uPhone, kwages["username"]))
+        affected_rows = self.cursor.execute(sql, (uRealName, uAge, uPhone, avatar_url, kwages["username"]))
         if affected_rows > 0:
             self.db.commit()
             self.write('{"msg":true}')

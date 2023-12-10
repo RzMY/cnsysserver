@@ -484,6 +484,7 @@
             line-height: 2;
 
         }
+
     </style>
 </head>
 <body>
@@ -492,7 +493,6 @@
         <img src="{{ avatar_url }}" alt="">
         <div class="close"></div>
     </div>
-    
     <div class="container">
         <div class="card">
             <div class="header">
@@ -523,6 +523,10 @@
                         <input id="realname" type="text" class="form_input" placeholder="{{realname}}">
                         <input id="age" type="number" class="form_input" placeholder="{{age}}">
                         <input id="phone" type="number" class="form_input" placeholder="{{phone}}">
+                        <div class="about-container">
+                            <h3 class="title" style="padding-bottom:5px">更改头像</h3>
+                        </div>
+                        <span><input type="file" name="avatar" accept="image/*"></span>
                     </form>
                     <div class="buttons-wrap">
                         <div id = "submit" class="follow-wrap">
@@ -554,6 +558,7 @@
 
         image.addEventListener('click', show);
         close.addEventListener('click', hide);
+
     </script>
     <script>
         $('#back').click(function(){
@@ -562,22 +567,27 @@
     </script>
     <script>
         $("#submit").on("click",function(){
-            event.preventDefault();
             var username = $('#username').val();
             var realname = $('#realname').val();
             var age = $('#age').val();
             var phone = $('#phone').val();
+            var avatar = $('input[type="file"]')[0].files[0];
             var xsrf = $('input[name="_xsrf"]').val();
+
+            var formData = new FormData();
+            formData.append('userName', username);
+            formData.append('realName', realname);
+            formData.append('age', age);
+            formData.append('phone', phone);
+            formData.append('avatar', avatar);
+            formData.append('_xsrf', xsrf);
+
             $.ajax({
                 url:'/profile',
                 type:'post',
-                data:{
-                    'userName':username,
-                    'realName':realname,
-                    'age':age,
-                    'phone':phone,
-                    '_xsrf':xsrf
-                },
+                data: formData,
+                processData: false,  // 告诉jQuery不要处理发送的数据
+                contentType: false,  // 告诉jQuery不要设置Content-Type请求头
                 success:function(data){
                     if(data.indexOf("{") >= 0){
                         var res = JSON.parse(data);
