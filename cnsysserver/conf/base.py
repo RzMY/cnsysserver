@@ -8,7 +8,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.write("Error:{}".format(status_code))
     
     def get_current_user(self):
-        username = self.get_secure_cookie("username")
+        username = self.get_secure_cookie("userName")
         if isinstance(username, bytes):
             return username.decode(encoding = "utf-8")
         return None

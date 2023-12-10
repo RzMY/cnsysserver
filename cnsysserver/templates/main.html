@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNOS系统报表页面</title>
+    <link rel="stylesheet" href="../static/fonts/iconfont.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+    <script src="../static/echart/echarts.js"></script>
+    <script src="../static/js/jQuery.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            font-family: 'Lato', sans-serif;
+            min-height: 100vh;
+            background-color: var(--body-color);
+            transition: all 0.3s ease;
+        }
+
+        /* 设置全局变量 */
+        :root {
+            --body-color: #E4E9F7;
+            --shell-color: #FFF;
+            --primary-color: rgb(83, 83, 93);
+            --primary-color-light: #F6F5FF;
+            --toggle-color: #DDD;
+            --text-color: #707070;
+        }
+
+        /* 深色主题变量 */
+        .dark {
+            --body-color: #202224;
+            --shell-color: #171717;
+            --primary-color: #3a3b3c;
+            --primary-color-light: #3a3b3c;
+            --toggle-color: #fff;
+            --text-color: #ccc;
+        }
+
+        .shell {
+            flex: 0 0 250px;
+            top: 0;
+            left: 0;
+            width: 200px;
+            padding: 10px 14px;
+            background: var(--shell-color);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .close {
+            flex: 0 0 88px;
+            width: 88px;
+        }
+
+        .shell li {
+            height: 50px;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .image,
+        .icon {
+            min-width: 60px;
+            border-radius: 6px;
+        }
+
+        .icon {
+            min-width: 60px;
+            border-radius: 6px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font: 300 23px '';
+        }
+
+        .text,
+        .icon {
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .text {
+            font: 500 17px;
+            white-space: nowrap;
+            opacity: 1;
+        }
+
+        .shell.close .text {
+            opacity: 0;
+        }
+
+        header {
+            position: relative;
+        }
+
+        .image-text {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .name {
+            margin-top: 2px;
+            font: 600 18px;
+        }
+
+        .software {
+            margin-top: -2px;
+            display: block;
+        }
+
+        .image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image img {
+            width: 45px;
+            border-radius: 6px;
+        }
+
+        .toggle {
+            position: absolute;
+            top: 50%;
+            right: -25px;
+            transform: translateY(-50%) rotate(180deg);
+            height: 25px;
+            width: 25px;
+            background-color: var(--primary-color);
+            color: var(--shell-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle {
+            color: #ccc;
+        }
+
+        .shell.close .toggle {
+            transform: translateY(-50%) rotate(0deg);
+        }
+
+        .menu {
+            margin-top: 40px;
+        }
+
+        li.search-box {
+            border-radius: 6px;
+            background-color: var(--primary-color-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        li.search-box input {
+            height: 100%;
+            width: 100%;
+            outline: none;
+            border: none;
+            background-color: var(--primary-color-light);
+            color: var(--text-color);
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .shell li a {
+            list-style: none;
+            height: 100%;
+            background-color: transparent;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .shell li a:hover {
+            background-color: var(--primary-color);
+        }
+
+        .shell li a:hover .icon,
+        .shell li a:hover .text {
+            color: var(--shell-color);
+        }
+
+        .menu-bar {
+            height: calc(100% - 55px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: scroll;
+        }
+
+        .menu-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .menu-bar .mode {
+            border-radius: 6px;
+            background-color: var(--primary-color-light);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .menu-bar .mode .sun-moon {
+            height: 50px;
+            width: 60px;
+        }
+
+        .mode .sun-moon i {
+            position: absolute;
+        }
+
+        .mode .sun-moon i.sun {
+            opacity: 0;
+        }
+
+        .toggle-switch {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            min-width: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .switch {
+            position: relative;
+            height: 22px;
+            width: 40px;
+            border-radius: 25px;
+            background-color: var(--toggle-color);
+            transition: all 0.3s ease;
+        }
+
+        .switch::before {
+            content: '';
+            position: absolute;
+            height: 15px;
+            width: 15px;
+            border-radius: 50%;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            background-color: var(--shell-color);
+            transition: all 0.3s ease;
+        }
+
+        .dark .shell li a:hover .icon,
+        .dark .shell li a:hover .text {
+            color: #ccc;
+        }
+
+        .dark .mode .sun-moon i.sun {
+            opacity: 1;
+        }
+
+        .dark .mode .sun-moon i.moon {
+            opacity: 0;
+        }
+
+        .dark .switch::before {
+            left: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .container2 {
+            display: flex;
+            height: 100%;
+            weight: 100%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .smaller_container2 {
+            display: flex;
+            height: 640px;
+            weight: 1040px%;
+            padding: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 1px dashed #ccc;
+            border-radius: 5px;
+        }
+
+        .main_report {
+            width: 1000px;
+            height: 600px;
+        }
+
+        .container {
+            padding-top: 10px;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #menu {
+            text-align: center;
+            background: var(--shell-color);
+            width: 50%;
+            height: 60px;
+            border-radius: 40px;
+        }
+        #menu ul li {
+            list-style: none;
+            display: inline-block;
+            padding: 8px 10px;
+            margin: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #777;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: color 0.5s;
+        }
+        #menu ul li::after {
+            content: '';
+            background: rgb(83, 83, 93);
+            width: 100%;
+            height: 100%;
+            border-radius: 30px;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            opacity: 0;
+            transition: top 0.5s,opacity 0.5s;
+        }
+        #menu ul li:hover{
+            color: #fff;
+        }
+        #menu ul li:hover::after{
+            top: 50%;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+    {% module xsrf_form_html() %}
+    <nav class="shell close">
+        <header>
+            <div class="image-text">
+                <span class="image">
+                    <img src="{{ avatar_url }}" alt="">
+                </span>
+                <div class="text logo-text">
+                    <span class="name" style="font-size:20px">{{username}}</span>
+                    <span class="software" style="font-size:12px">-CNOS-</span>
+                </div>
+            </div>
+            <i class="iconfont icon-xiangyouzhankai toggle"></i>
+        </header>
+        <div class="menu-bar">
+            <div class="menu">
+                <li class="search-box">
+                    <i class="iconfont icon-shaixuan icon"></i>
+                    <input type="text" placeholder="搜索...">
+                </li>
+                <ul class="menu-links">
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="iconfont icon-baobiao2 icon"></i>
+                            <span class="text nac-text">主页</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="iconfont icon-xiaoxi icon"></i>
+                            <span class="text nac-text">消息</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a id = "profile">
+                            <i class="iconfont icon-geren icon"></i>
+                            <span class="text nac-text">账户管理</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="iconfont icon-shezhi icon"></i>
+                            <span class="text nac-text">设置</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-link">
+                        <a href="#">
+                            <i class="iconfont icon-qita icon"></i>
+                            <span class="text nac-text">更多</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bottom-content">
+                <li class="">
+                    <a id = "loginOut">
+                        <i class="iconfont icon-dengchu icon"></i>
+                        <span class="text nac-text">注销</span>
+                    </a>
+                </li>
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class="iconfont icon-rijianmoshi icon sun"></i>
+                        <i class="iconfont icon-yejianmoshi icon moon"></i>
+                    </div>
+                    <span class="mode-text text">夜间模式</span>
+                    <div class="toggle-switch">
+                        <span class="switch"></span>
+                    </div>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <nav id="menu">
+                <ul>
+                    <li class="menu-item" data-target="main" >复购率</li>
+                    <li class="menu-item" data-target="main2">回购率</li>
+                    <li class="menu-item" data-target="main3">贡献度</li>
+                    <li class="menu-item" data-target="main4">每月消费</li>
+                    <li class="menu-item" data-target="main5">购买周期</li>
+                </ul>
+            </nav>
+        </div>
+        <div class='container2'>
+            <div class="smaller_container2">
+                <div class="main_report" id="main"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+
+    const body = document.querySelector('body'),
+        shell = body.querySelector('nav'),
+        toggle = body.querySelector(".toggle"),
+        searchBtn = body.querySelector(".search-box"),
+        modeSwitch = body.querySelector(".toggle-switch"),
+        modeText = body.querySelector(".mode-text");
+    // 点击toggle元素时触发事件
+    toggle.addEventListener("click", () => {
+        // 切换shell元素的close类
+        shell.classList.toggle("close");
+    })
+    // 点击searchBtn元素时触发事件
+    searchBtn.addEventListener("click", () => {
+        // 移除shell元素的close类
+        shell.classList.remove("close");
+    })
+    // 点击modeSwitch元素时触发事件
+    modeSwitch.addEventListener("click", () => {
+        // 切换body元素的dark类
+        body.classList.toggle("dark");
+        // 如果body元素包含dark类
+        if (body.classList.contains("dark")) {
+            modeText.innerText = "白日模式";
+        } else {
+            modeText.innerText = "夜间模式";
+        }
+    });
+
+</script>
+
+<script>
+
+    // 基于准备好的dom，初始化echarts实例
+    // var myChart = echarts.init(document.getElementById('main'));
+    // var myChart2 = echarts.init(document.getElementById('main2'));
+    // 指定图表的配置项和数据
+
+    // 复购率
+    var option = {
+        title: {
+            text: ''
+        },
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataZoom: {
+                yAxisIndex: false
+                },
+                saveAsImage: {
+                pixelRatio: 2
+                }
+            }
+        },
+        legend: {
+            data: ['复购率']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+            series: [
+            {
+                name: '复购率',
+                type: 'bar',
+                data: []
+            },
+            {
+                name: '复购率',
+                type: 'line',
+                data: []
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表
+    // 设置数据
+    option.title.text = '2010-2011年用户复购率统计';
+    var dataYear = [];// 空的数组对象
+    var dataFugou = [];// 复购率数组对象
+        {% for row_fugou in fugou %}
+            dataYear.push('{{row_fugou[0]}}月');
+            dataFugou.push('{{row_fugou[4]}}');
+        {% end %}
+    option.xAxis.data = dataYear;
+    option.series[0].data = dataFugou;
+    option.series[1].data = dataFugou;
+
+    // 回购率
+    var option2 = {
+        title: {
+            text: ''
+        },
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataZoom: {
+                yAxisIndex: false
+                },
+                saveAsImage: {
+                pixelRatio: 2
+                }
+            }
+        },
+        legend: {
+            data: ['回购率']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {
+            axisLabel: {
+            show: true,
+            inside: false
+          },},
+            series: [
+            {
+                name: '回购率',
+                type: 'bar',
+                data: []
+            },
+            {
+                name: '回购率',
+                type: 'line',
+                data: []
+            }
+        ]
+    };
+    option2.title.text = '2010-2011年用户回购率统计';
+    var dataHuigou = [];// 回购率数组对象
+        {% for row_huigou in huigou %}
+            dataHuigou.push('{{row_huigou[3]}}');
+        {% end %}
+    option2.xAxis.data = dataYear;
+    option2.series[0].data = dataHuigou;
+    option2.series[1].data = dataHuigou;
+    console.log(dataHuigou);
+
+    // 贡献度
+    
+    var option3 = {
+        title: {
+            text: ''
+        },
+        legend: {},
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataZoom: {
+                yAxisIndex: false
+                },
+                saveAsImage: {
+                pixelRatio: 2
+                }
+            }
+        },
+        dataset: {
+          source: [
+            ['客户', '人数占比', '消费占比', '客单价'],
+            ['低端客户','', '', ''],
+            ['高端客户', '', '', ''],
+          ]
+        },
+        xAxis: { type: 'category' },
+        yAxis: [
+            {
+                position:'left',
+                type: 'value',
+                min: 0,
+                max: 1,
+                interval: 0.1,
+                splitLine:{show:false},
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#000'
+                    }
+                },
+                axisLabel: {
+                  show: true,
+                  inside: false
+                }
+            },
+            {
+                position:'right',
+                type: 'value',
+                splitLine:{show:false},
+                axisLine: {
+                    show: true,
+                    lineStyle: {
+                        color: '#000'
+                    }
+                },
+                axisLabel: {
+                  show: true,
+                  inside: false
+                }
+            }
+        ],
+        series: [{ type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+            color: 'rgba(180, 180, 180, 0.2)'
+            },
+            yAxisIndex: 0,
+            interval: 0.1,
+            min: 0,
+            max: 1,
+            }, 
+            { type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            },
+            yAxisIndex: 0,
+            interval: 0.1,
+            min: 0,
+            max: 1,
+            }, 
+            { type: 'line',
+            yAxisIndex: 1, 
+            }
+        ]
+    };
+    option3.title.text = '2010-2011年低端客户与高端客户贡献度统计';
+    var dataXiaofei = [];// 消费占比数组对象
+    var dataRen = [];// 人数占比数组对象
+    var dataKedanjia = [];// 客单价数组对象
+        {% for row_diduan in diduan %}
+            dataXiaofei.push('{{row_diduan[0]}}');
+            dataRen.push('{{row_diduan[1]}}');
+            dataKedanjia.push('{{row_diduan[2]}}');
+        {% end %}
+        {% for row_gaoduan in gaoduan %}
+            dataXiaofei.push('{{row_gaoduan[0]}}');
+            dataRen.push('{{row_gaoduan[1]}}');
+            dataKedanjia.push('{{row_gaoduan[2]}}');
+        {% end %}
+    option3.dataset.source[1][1] = dataRen[0];
+    option3.dataset.source[1][2] = dataXiaofei[0];
+    option3.dataset.source[1][3] = dataKedanjia[0];
+    option3.dataset.source[2][1] = dataRen[1];
+    option3.dataset.source[2][2] = dataXiaofei[1];
+    option3.dataset.source[2][3] = dataKedanjia[1];
+    console.log(option3.dataset.source);
+
+    // 每月消费
+
+    var option4 = {
+        title: {
+            text: ''
+        },
+        tooltip: {},
+        toolbox: {
+            feature: {
+                dataZoom: {
+                yAxisIndex: false
+                },
+                saveAsImage: {
+                pixelRatio: 2
+                }
+            }
+        },
+        legend: {
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: [{
+            position:'left',
+            type: 'value',
+            splitLine:{show:false},
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: '#000'
+                }
+            },
+            axisLabel: {
+              show: true,
+              inside: false
+            }
+            },
+            {
+            position:'right',
+            type: 'value',
+            splitLine:{show:false},
+            axisLine: {
+                show: true,
+                lineStyle: {
+                    color: '#000'
+                }
+            },
+            axisLabel: {
+              show: true,
+              inside: false
+            }
+            }
+            ],
+            series: [
+            {
+                yAxisIndex: 0,
+                name: '消费人数',
+                type: 'bar',
+                data: []
+            },
+            {   
+                yAxisIndex: 1,
+                name: '消费金额',
+                type: 'line',
+                data: []
+            }
+            ]
+    };
+    option4.title.text = '2010-2011年用户消费情况统计';
+    var dataMonth = [];// 月份
+    var dataXiaoFeiRen = [];// 消费人数数组对象
+    var dataXiaoFeiJinE = [];// 消费金额数组对象
+        {% for row_xiaofei in xiaofei %}
+            dataMonth.push('{{row_xiaofei[1]}}月');
+            dataXiaoFeiRen.push('{{row_xiaofei[2]}}');
+            dataXiaoFeiJinE.push('{{row_xiaofei[3]}}');
+        {% end %}
+    option4.xAxis.data = dataMonth;
+    option4.series[0].data = dataXiaoFeiRen;
+    option4.series[1].data = dataXiaoFeiJinE;
+    console.log(option4.series[0].data);
+    console.log("test");
+
+    // 购买周期
+    
+    var option5 = {
+        title: {
+        text: "",
+        left: 10
+        },
+        legend: {
+            data: ['购买周期']
+        },
+        toolbox: {
+        feature: {
+            dataZoom: {
+            yAxisIndex: false
+            },
+            saveAsImage: {
+            pixelRatio: 2
+            }
+        }
+        },
+        tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+        },
+        grid: {
+        bottom: 90
+        },
+        dataZoom: [
+        {
+            type: 'inside'
+        },
+        {
+            type: 'slider'
+        }
+        ],
+        xAxis: {
+        data: [],
+        silent: false,
+        splitLine: {
+            show: false
+        },
+        splitArea: {
+            show: false
+        }
+        },
+        yAxis: {
+        splitArea: {
+            show: false
+        }
+        },
+        series: [
+        {
+            name: '所有周期',
+            type: 'bar',
+            data: [],
+            // Set `large` for large data amount
+            large: true
+        },
+        {
+            name: '平均周期',
+            type: 'line',
+            data: [],
+            large: true
+        }
+        ]
+        };
+        var dataID = [];// 用户ID数组对象
+        var dataZhouQi = [];// 回购率数组对象
+        var dataPingJunZhouQi = [];// 平均周期数组对象
+        {% for row_pingjunzhouqi in pingjunzhouqi %}
+            {% for row_zhouqi in zhouqi %}
+                dataID.push('{{row_zhouqi[0]}}');
+                dataZhouQi.push('{{row_zhouqi[1]}}');
+                dataPingJunZhouQi.push('{{row_pingjunzhouqi[0]}}');
+            {% end %}
+        {% end %}
+        option5.title.text = '2010-2011年用户回购率统计';
+        option5.xAxis.data = dataID;
+        option5.series[0].data = dataZhouQi;
+        option5.series[1].data = dataPingJunZhouQi;
+        console.log(option5.series[0].data);
+        console.log(dateID);
+        console.log("test5");
+</script>
+<script>
+    $(document).ready(function() {
+        $('.menu-item').click(function() {
+            var myChart = null;
+            if (myChart != null && myChart != "" && myChart != undefined){
+                myChart.dispose();
+            }
+            var myChart = echarts.init(document.getElementById('main'));
+            var target = $(this).data('target');
+            console.log(target);
+            console.log(myChart);
+            switch(target) {
+                case 'main':
+                    myChart.setOption(option);
+                    break;
+                case 'main2':
+                    myChart.setOption(option2);
+                    break;
+                case 'main3':
+                    myChart.setOption(option3);
+                    break;
+                case 'main4':
+                    myChart.setOption(option4);
+                    break;
+                case 'main5':
+                    myChart.setOption(option5);
+                    break;
+                default:
+                    // 默认操作
+                    break;
+            }
+        });
+
+        // 默认渲染复购率的echarts报表
+        $('.menu-item[data-target="main5"]').click();
+    });
+</script>
+<script>
+    $('#loginOut').click(function(){
+        self.location='/loginOut';
+    })
+    $('#profile').click(function(){
+        self.location='/profile';
+    })
+</script>
+</html>

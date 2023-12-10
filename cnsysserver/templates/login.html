@@ -1,91 +1,422 @@
-﻿<html lang="zh-cn">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta name="apple-mobile-web-app-title" content="作业结果">
-	<meta name="msapplication-tap-highlight" content="no">
-	<meta name="screen-orientation" content="portrait">
-	<meta name="browsermode" content="application">
-	<meta name="full-screen" content="yes">
-	<meta name="x5-orientation" content="portrait">
-	<meta name="x5-fullscreen" content="true">
-	<meta name="x5-page-mode" content="app">
-	<meta name="HandheldFriendly" content="true">
-	<meta name="MobileOptimized" content="320">
-	<meta http-equiv="Cache-Control" content="no-siteapp">
-	<meta name="viewport" content="width=1280,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
-	<title>CNOS登录页面</title>
-	<link href="static/css/vendor.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
-	<link href="static/css/login.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNOS登录</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link href="../static/css/mui.css" rel="stylesheet">
+	<script src="../static/js/mui.js"></script>
+    <script src="../static/js/jQuery.js"></script>
+	<script type="text/javascript">
+		mui.init();
+	</script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            /* 字体无法选中 */
+            user-select: none;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            background-color: #ecf0f3;
+            color: #a0a5a8;
+            font-family: 'Lato', sans-serif;
+        }
+
+        .shell {
+            position: relative;
+            width: 1000px;
+            min-width: 1000px;
+            min-height: 600px;
+            height: 600px;
+            padding: 25px;
+            background-color: #ecf0f3;
+            box-shadow: 10px 10px 10px #d1d9e6, -10px -10px 10px #f9f9f9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* 设置响应式 */
+        @media (max-width: 1200px) {
+            .shell {
+                transform: scale(0.7);
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .shell {
+                transform: scale(0.6);
+            }
+        }
+
+        @media (max-width: 800px) {
+            .shell {
+                transform: scale(0.5);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .shell {
+                transform: scale(0.4);
+            }
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            width: 600px;
+            height: 100%;
+            padding: 25px;
+            background-color: #ecf0f3;
+            transition: 1.25s;
+        }
+
+        .form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+
+        .iconfont {
+            margin: 0 5px;
+            border: rgba(0, 0, 0, 0.5) 2px solid;
+            border-radius: 50%;
+            font-size: 25px;
+            padding: 3px;
+            opacity: 0.5;
+            transition: 0.1s;
+        }
+
+        .iconfont:hover {
+            opacity: 1;
+            transition: 0.15s;
+            cursor: pointer;
+        }
+
+        .form_input {
+            width: 350px !important;
+            height: 40px !important;
+            margin: 4px 0 !important;
+            padding-left: 25px !important;
+            font-size: 13px !important;
+            letter-spacing: 0.15px !important;
+            border: none !important;
+            outline: none !important;
+            background-color: #ecf0f3 !important;
+            transition: 0.25s ease !important;
+            border-radius: 8px !important;
+            box-shadow: inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #f9f9f9 !important;
+        }
+
+        .form_input:focus {
+            box-shadow: inset 4px 4px 4px #d1d9e6, inset -4px -4px 4px #f9f9f9 !important;
+        }
+
+        .form_span {
+            margin-top: 30px;
+            margin-bottom: 12px;
+        }
+
+        .form_link {
+            color: #181818;
+            font-size: 15px;
+            margin-top: 25px;
+            border-bottom: 1px solid #a0a5a8;
+            line-height: 2;
+        }
+
+        .title {
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 3;
+            color: #181818;
+            letter-spacing: 10px;
+        }
+
+        .description {
+            font-size: 14px;
+            letter-spacing: 0.25px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .button {
+            width: 180px;
+            height: 50px;
+            border-radius: 25px;
+            margin-top: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1.15px;
+            background-color: #4B70E2;
+            color: #f9f9f9;
+            box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #f9f9f9;
+            border: none;
+            outline: none;
+        }
+
+        .a-container {
+            z-index: 100;
+            left: calc(100% - 600px);
+        }
+
+        .b-container {
+            left: calc(100% - 600px);
+            z-index: 0;
+        }
+
+        .switch {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 400px;
+            padding: 50px;
+            z-index: 200;
+            transition: 1.25s;
+            background-color: #ecf0f3;
+            overflow: hidden;
+            box-shadow: 4px 4px 10px #d1d9e6, -4px -4px 10px #d1d9e6;
+        }
+
+        .switch_circle {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background-color: #ecf0f3;
+            box-shadow: inset 8px 8px 12px #b8bec7, inset -8px -8px 12px #fff;
+            bottom: -60%;
+            left: -60%;
+            transition: 1.25s;
+        }
+
+        .switch_circle-t {
+            top: -30%;
+            left: 60%;
+            width: 300px;
+            height: 300px;
+        }
+
+        .switch_container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: absolute;
+            width: 400px;
+            padding: 50px 55px;
+            transition: 1.25s;
+        }
+
+        .switch_button {
+            cursor: pointer;
+        }
+
+        .switch_button:hover,
+        .submit:hover {
+            box-shadow: 6px 6px 10px #d1d9e6, -6px -6px 10px #f9f9f9;
+            transform: scale(0.985);
+            transition: 0.25s;
+        }
+
+        .switch_button:active,
+        .switch_button:focus {
+            box-shadow: 2px 2px 6px #d1d9e6, -2px -2px 6px #f9f9f9;
+            transform: scale(0.97);
+            transition: 0.25s;
+        }
+
+        .is-txr {
+            left: calc(100% - 400px);
+            transition: 1.25s;
+            transform-origin: left;
+        }
+
+        .is-txl {
+            left: 0;
+            transition: 1.25s;
+            transform-origin: right;
+        }
+
+        .is-z {
+            z-index: 200;
+            transition: 1.25s;
+        }
+
+        .is-hidden {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            transition: 1.25s;
+        }
+
+        .is-gx {
+            animation: is-gx 1.25s;
+        }
+
+        @keyframes is-gx {
+
+            0%,
+            10%,
+            100% {
+                width: 400px;
+            }
+
+            30%,
+            50% {
+                width: 500px;
+            }
+        }
+
+        #links20210126 {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-	<div id="mount">
-		<div data-reactroot="">
-			<div class="_1RxfFVyy86UE1t7lqCDcGD">
-				<div class="_3CkMCIo8-RsWtcLQqsuKBh">
-					<div class="_3lr3h2hawOi8pO8fYLQcjI">CNOS登录</div>
-					<div class="_6vZdUKmPDGrrza0LnuXD9">
-						<div>
-							<div class="mobileIcon"></div>
-							<input type="text" id= "username" maxlength="11" autocomplete="off" placeholder="请输入用户名">
-							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
-						</div>
-					</div>
-					<div class="_6vZdUKmPDGrrza0LnuXD9">
-						<div>
-							<div class="passwordIcon"></div>
-							<input type="password" id= "password" autocomplete="off" placeholder="请输入6-20位密码">
-							<p class="_2nSTvdgBwioyepYsyeaVPN"></p>
-						</div>
-					</div>
-					<div class="_6vZdUKmPDGrrza0LnuXD9"><a class="_2ZggRBvDTyawWaQQ6ambu4">登录</a></div>
-					<div class="_6vZdUKmPDGrrza0LnuXD9">
-						<div>
-							<p class="_2owYBOfa1UIX-AfegSAhj7"><a href="">快速注册</a><span></span></p>
-							<a href="" class="_3x9qBnGOvjSE2ZmDfi1w5g">忘记密码</a>
-						</div>
-					</div>
-				</div>
-				{% module xsrf_form_html() %}
-			</div>
-		</div>
-	</div>
-	<div class="copyrights" id="links20210126">
-		<p align="center">版权所有&copy;邱宗森 202203792</p>
-	</div>
-	<script src="../static/js/jQuery.js"></script>
-	<script>
-//		window.onload = function() {
-//			var loginButton = document.querySelector("._2ZggRBvDTyawWaQQ6ambu4");
-//			var usernameInput = document.querySelector("input[type='text']");
-//			loginButton.addEventListener("click", function() {
-//				var username = usernameInput.value;
-//				alert("登录成功，欢迎回来，" + username);
-//			});
-//		}
+    {% module xsrf_form_html() %}
+    <div class="shell">
+        <div class="container a-container" id="a-container">
+            <form action="" method="" class="form" id="a-form">
+                <h2 class="form_title title">创建账号</h2>
+                <input id="username" type="text" class="form_input" placeholder="ID">
+                <input id="realname" type="text" class="form_input" placeholder="Name">
+                <input id="age" type="number" class="form_input" placeholder="Age">
+                <input id="phone" type="number" class="form_input" placeholder="Phone">
+                <input id="password" type="password" class="form_input" placeholder="Password">
+                <button id="sign_up" class="form_button button submit">SIGN UP</button>
+            </form>
+        </div>
+
+        <div class="container b-container" id="b-container">
+            <form action="" method="" class="form" id="b-form">
+                <h2 class="form_title title">登入账号</h2>
+                <input type="tel" id="phone_in" class="form_input" placeholder="Phone">
+                <input type="password" id="password_in" class="form_input" placeholder="Password">
+                <a id = "forget_password" class="form_link">忘记密码？</a>
+                <button id="sign_in" class="form_button button submit">SIGN IN</button>
+            </form>
+        </div>
+
+        <div class="switch" id="switch-cnt">
+            <div class="switch_circle"></div>
+            <div class="switch_circle switch_circle-t"></div>
+            <div class="switch_container" id="switch-c1">
+                <h2 class="switch_title title" style="letter-spacing: 0;">Welcome Back！</h2>
+                <p class="switch_description description">已经有账号了？前往登录吧！</p>
+                <button class="switch_button button switch-btn">SIGN IN</button>
+            </div>
+
+            <div class="switch_container is-hidden" id="switch-c2">
+                <h2 class="switch_title title" style="letter-spacing: 0;">Hello Friend!</h2>
+                <p class="switch_description description">注册一个账号，成为我们的会员！</p>
+                <button class="switch_button button switch-btn">SIGN UP</button>
+            </div>
+        </div>
+    </div>
+    <div class="copyrights" id="links20210126">
+        <p align="center">版权所有 &copy; 邱宗森 202203792</p>
+    </div>
+
+    <script>
+        let switchCtn = document.querySelector("#switch-cnt");
+        let switchC1 = document.querySelector("#switch-c1");
+        let switchC2 = document.querySelector("#switch-c2");
+        let switchCircle = document.querySelectorAll(".switch_circle");
+        let switchBtn = document.querySelectorAll(".switch-btn");
+        let aContainer = document.querySelector("#a-container");
+        let bContainer = document.querySelector("#b-container");
+        let allButtons = document.querySelectorAll(".submit");
+
+        let getButtons = (e) => e.preventDefault()
+        let changeForm = (e) => {
+            // 修改类名
+            switchCtn.classList.add("is-gx");
+            setTimeout(function () {
+                switchCtn.classList.remove("is-gx");
+            }, 1500)
+            switchCtn.classList.toggle("is-txr");
+            switchCircle[0].classList.toggle("is-txr");
+            switchCircle[1].classList.toggle("is-txr");
+
+            switchC1.classList.toggle("is-hidden");
+            switchC2.classList.toggle("is-hidden");
+            aContainer.classList.toggle("is-txl");
+            bContainer.classList.toggle("is-txl");
+            bContainer.classList.toggle("is-z");
+        }
+        // 点击切换
+        let shell = (e) => {
+            for (var i = 0; i < allButtons.length; i++)
+                allButtons[i].addEventListener("click", getButtons);
+            for (var i = 0; i < switchBtn.length; i++)
+                switchBtn[i].addEventListener("click", changeForm)
+        }
+        window.addEventListener("load", shell);
+
+    </script>
+    <script>
 		$(document).ready(function(){
 			//当页面渲染完成后，执行以下代码
-			$("._2ZggRBvDTyawWaQQ6ambu4").on("click",function(){
-				var userval = $("#username").val();
-				var passval = $("#password").val();
+			$("#forget_password").on("click",function(){
+				// 点击忘记密码
+				mui.alert("请联系管理员");
+			})
+			$("#sign_in").on("click",function(){
+				var userval = $("#phone_in").val();
+				var passval = $("#password_in").val();
 				if(userval == "" || passval == ""){
-					alert("用户名或密码不能为空");
+					mui.alert("用户名或密码不能为空");
 				}else{
 					// 将数据传递给后端
 					$.ajax({
 						url:'/login',
 						type:'post',
 						data:{
+                            type:"sign_in",
 							userName:userval,
 							passWord:passval,
 							_xsrf:$("input[name='_xsrf']").val()
 						},
 						success:function(data){
 							// 成功回调函数
+							console.log(data);
+							if(data.indexOf("{") >= 0){
+								var res = JSON.parse(data);
+								if(res.msg){
+									mui.alert("登录成功，即将跳转")
+									setTimeout(function(){
+										location.href = "/main";
+									}, 2000);  // 延迟2000毫秒（即2秒）后执行跳转
+								}else{
+									mui.alert("用户名或密码错误");
+								}
+							}
 						},
 						error:function(data){
 							// 失败回调函数
@@ -93,7 +424,46 @@
 					})
 				}
 			})
+            $("#sign_up").on("click",function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var realname = $('#realname').val();
+                var age = $('#age').val();
+                var phone = $('#phone').val();
+                var xsrf = $('input[name="_xsrf"]').val();
+				if(username == "" || password == "" || realname == "" || age == "" || phone == ""){
+					mui.alert("请填写完整信息");
+				}else{
+					$.ajax({
+						url:'/login',
+						type:'post',
+						data:{
+                            'type':"sign_up",
+							'userName':username,
+							'passWord':password,
+							'realName':realname,
+							'age':age,
+							'phone':phone,
+							'_xsrf':xsrf
+						},
+						success:function(data){
+							if(data.indexOf("{") >= 0){
+								var res = JSON.parse(data);
+								if(res.msg){
+									mui.alert("注册成功，即将跳转")
+									setTimeout(function(){
+										location.href = "/main";
+									}, 2000);  // 延迟2000毫秒（即2秒）后执行跳转
+								}else{
+									mui.alert("注册失败，请联系管理员");
+								}
+							}
+						}
+					})
+				}
+            })
 		})
 	</script>
 </body>
+
 </html>

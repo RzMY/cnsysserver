@@ -7,7 +7,11 @@ from conf.base import BaseHandler,EnterHandler
 from conf.conf import *
 
 # 导入定义的controller
-from controller.loginC import LoginHandler
+from controller.loginC import *
+from controller.mainC import *
+from controller.DataC import *
+from controller.loginOutC import *
+from controller.profileC import *
 # 定义并设置应用的通用配置
 # 放置所有的请求地址及请求对应的视图
 
@@ -18,7 +22,11 @@ handlers = list()
 # http://localhost:10086/
 handlers.extend([
     URLSpec("/",EnterHandler,name="enterPoint"),
-    URLSpec("/login",LoginHandler,name="loginPoint"),
+    URLSpec("/login",LoginHandler,dict(db=db),name="loginHandler"),
+    URLSpec("/main",MainHandler,dict(db=db),name="mainHandler"),
+    URLSpec("/queryBy",DataHandler,dict(db=db),name="dataHandler"),
+    URLSpec("/loginOut",LoginOutHandler,dict(db=db),name="loginOutHandler"),
+    URLSpec("/profile",ProfileHandler,dict(db=db),name="profileHandler"),
 ])
 
 # 将路由放置到application中

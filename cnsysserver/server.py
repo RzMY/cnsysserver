@@ -12,10 +12,10 @@ from application import app
 # 定义端口号
 define("port", default = 10086, type = int, help = "Server Listen On The Given Ports")
 # cmd python server.py --help
-# cmd python server.py --port=10000
+# cmd python server.py --port = 10086
 
 def main():
-    parse_command_line()# 接收控制端的输入内容参数值--port=10000
+    parse_command_line()# 接收控制端的输入内容参数值--port=10086
     print("ZL HTTPServer Runing On Port {} ...".format(options.port))
     print("Stop The ZL HTTPServer With Ctrl + C")
     # 将程序app部署到HTTPServer中

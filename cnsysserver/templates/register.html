@@ -1,0 +1,102 @@
+<html lang="zh-cn">
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="screen-orientation" content="portrait">
+	<meta name="browsermode" content="application">
+	<meta name="full-screen" content="yes">
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="MobileOptimized" content="320">
+	<meta http-equiv="Cache-Control" content="no-siteapp">
+	<meta name="viewport" content="width=1280,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+	<title>CNOS注册页面</title>
+	<link href="static/css/vendor.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+	<link href="static/css/login.style.css?afd0be12dc329c5b1db7" rel="stylesheet">
+	<link href="static/css/mui.css" rel="stylesheet">
+	<script src="static/js/mui.js"></script>
+	<script type="text/javascript">
+		mui.init();
+	</script>
+</head>
+
+<body>
+	<div id="mount">
+		<div data-reactroot="">
+			<div class="_1RxfFVyy86UE1t7lqCDcGD">
+				<div class="_3CkMCIo8-RsWtcLQqsuKBh">
+					<div class="_3lr3h2hawOi8pO8fYLQcjI">CNOS注册</div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9" style="margin: 0 auto; padding-top: 10px;">
+						<input type="text" id= "username" maxlength="11" autocomplete="off" placeholder="请输入用户名">
+					</div>
+                    <div class="_6vZdUKmPDGrrza0LnuXD9" style="margin: 0 auto;">
+                        <input type="text" id="realname" autocomplete="off" placeholder="请输入真实姓名">
+                    </div>
+                    <div class="_6vZdUKmPDGrrza0LnuXD9" style="margin: 0 auto;">
+                        <input type="number" id="age" autocomplete="off" placeholder="请输入年龄">
+                    </div>
+                    <div class="_6vZdUKmPDGrrza0LnuXD9" style="margin: 0 auto;">
+                        <input type="tel" id="phone" autocomplete="off" placeholder="请输入电话">
+                    </div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9" style="margin: 0 auto;">
+						<input type="password" id= "password" autocomplete="off" placeholder="请输入6-20位密码">
+					</div>
+					<div class="_6vZdUKmPDGrrza0LnuXD9"><a class="_2ZggRBvDTyawWaQQ6ambu4">快速注册</a></div>
+				</div>
+				{% module xsrf_form_html() %}
+			</div>
+		</div>
+	</div>
+	<div class="copyrights" id="links20210126">
+		<p align="center">版权所有 &copy; 邱宗森 202203792</p>
+	</div>
+	<script src="../static/js/jQuery.js"></script>
+	<script>
+		$(document).ready(function(){
+            $("._2ZggRBvDTyawWaQQ6ambu4").on("click",function(){
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var realname = $('#realname').val();
+                var age = $('#age').val();
+                var phone = $('#phone').val();
+                var xsrf = $('input[name="_xsrf"]').val();
+				if(username == "" || password == "" || realname == "" || age == "" || phone == ""){
+					mui.alert("请填写完整信息");
+				}else{
+					$.ajax({
+						url:'/register',
+						type:'post',
+						data:{
+							'userName':username,
+							'passWord':password,
+							'realName':realname,
+							'age':age,
+							'phone':phone,
+							'_xsrf':xsrf
+						},
+						success:function(data){
+							if(data.indexOf("{") >= 0){
+								var res = JSON.parse(data);
+								if(res.msg){
+									mui.alert("注册成功，即将跳转")
+									setTimeout(function(){
+										location.href = "/login";
+									}, 2000);  // 延迟2000毫秒（即2秒）后执行跳转
+								}else{
+									mui.alert("注册失败，请联系管理员");
+								}
+							}
+						}
+					})
+				}
+            })
+		})
+	</script>
+</body>
+</html>

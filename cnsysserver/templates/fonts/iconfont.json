@@ -1,0 +1,72 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20771743",
+      "name": "全部应用",
+      "font_class": "quanbuyingyong",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "20771815",
+      "name": "工具类",
+      "font_class": "gongjulei",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "20771816",
+      "name": "其他",
+      "font_class": "qita",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "20771820",
+      "name": "财务类",
+      "font_class": "caiwulei",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "20771969",
+      "name": "b26",
+      "font_class": "b26",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "20771973",
+      "name": "b2",
+      "font_class": "b2",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "20772025",
+      "name": "b6",
+      "font_class": "b6",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "20772026",
+      "name": "b3",
+      "font_class": "b3",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "32898535",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    }
+  ]
+}
