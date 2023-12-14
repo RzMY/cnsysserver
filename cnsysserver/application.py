@@ -12,6 +12,7 @@ from controller.mainC import *
 from controller.DataC import *
 from controller.loginOutC import *
 from controller.profileC import *
+from controller.heartbeatC import *
 # 定义并设置应用的通用配置
 # 放置所有的请求地址及请求对应的视图
 
@@ -27,6 +28,7 @@ handlers.extend([
     URLSpec("/queryBy",DataHandler,dict(db=db),name="dataHandler"),
     URLSpec("/loginOut",LoginOutHandler,dict(db=db),name="loginOutHandler"),
     URLSpec("/profile",ProfileHandler,dict(db=db),name="profileHandler"),
+    URLSpec("/heartbeat",HeartbeatHandler,dict(db=db),name="heartbeatHandler"),
 ])
 
 # 将路由放置到application中

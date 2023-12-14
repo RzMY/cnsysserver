@@ -38,7 +38,7 @@ class ProfileHandler(BaseHandler):
         kwages = dict()
         kwages["username"] = BaseHandler.get_current_user(self)
 
-        # 查询用户头像
+        # 查询用户信息
         sql = """SELECT * FROM user_info WHERE username = %s"""
         # (1, 'user1', '7c6a180b36896a0a8c02787eeafb0e4c', '张三', 25, '13800138000', '../static/images/cat_default_avatar.jpg')
         self.cursor.execute(sql, (kwages["username"],))
@@ -49,7 +49,6 @@ class ProfileHandler(BaseHandler):
         kwages["age"] = info[4]
         kwages["phone"] = info[5]
         
-        # 将前台数据更新到数据库
         uRealName = self.get_argument("realName", default = kwages['realname'], strip=True)
         uAge = self.get_argument("age", default = kwages['age'], strip=True)
         uPhone = self.get_argument("phone", default = kwages['phone'], strip=True)
@@ -69,12 +68,15 @@ class ProfileHandler(BaseHandler):
             avatar_url = '../' + avatar_path
         else:
             avatar_url = info[6]  # 使用旧的头像URL
+            
+        # 更新数据库的所有数据
         sql = \
             """
             UPDATE user_info
             SET real_name = %s, age = %s, phone_number = %s, avatar_url = %s
             WHERE username = %s
             """
+        # 如果前台没有传入数据，则使用数据库中的数据
         if uRealName == "":
             uRealName = kwages['realname']
         if uAge == "":

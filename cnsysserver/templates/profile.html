@@ -519,9 +519,13 @@
                         <h3 class="title">Profile</h3>
                     </div>
                     <form action="" method="" class="form" id="a-form" style="padding-left: 9px">
+                        <label for="username">用户名:</label>
                         <input id="username" type="text" class="form_input" placeholder="{{username}}" readonly>
+                        <label for="realname">真实姓名:</label>
                         <input id="realname" type="text" class="form_input" placeholder="{{realname}}">
+                        <label for="age">年龄:</label>
                         <input id="age" type="number" class="form_input" placeholder="{{age}}">
+                        <label for="phone">电话:</label>
                         <input id="phone" type="number" class="form_input" placeholder="{{phone}}">
                         <div class="about-container">
                             <h3 class="title" style="padding-bottom:5px">更改头像</h3>
@@ -609,6 +613,15 @@
             $('#age').val('');
             $('#phone').val('');
         });
+        setInterval(function() {
+            $.ajax({
+                url:'/heartbeat',
+                type:'post',
+                data:{
+                    _xsrf:$("input[name='_xsrf']").val()
+                }
+            })
+        }, 60000);  // 每60秒发送一次请求
     </script>
 </body>
 </html>

@@ -19,44 +19,44 @@ class DataHandler(BaseHandler):
         if m == "fugou":
             # 先处理数据
             sql_fugou = \
-"""
-SELECT
-	yr,
-	mt,
-	COUNT(
-	IF
-		(
-			t1.orders > 1,
-			t1.orders,
-		NULL 
-		) 
-	) AS a,
-	COUNT( t1.orders ) AS b, COUNT(
-	IF
-		(
-			t1.orders > 1,
-			t1.orders,
-		NULL 
-		) 
-	) / COUNT( t1.orders )
-FROM
-	(
-	SELECT YEAR
-		( InvoiceDate ) AS yr,
-		MONTH ( InvoiceDate ) AS mt,
-		CustomerId,
-		COUNT( DISTINCT InvoiceNo ) AS orders 
-	FROM
-		OnlineRetail 
-	GROUP BY
-		YEAR ( InvoiceDate ),
-		MONTH ( InvoiceDate ),
-		CustomerId 
-	) AS t1 
-GROUP BY
-	yr,
-	mt
- """
+				"""
+				SELECT
+					yr,
+					mt,
+					COUNT(
+					IF
+						(
+							t1.orders > 1,
+							t1.orders,
+						NULL 
+						) 
+					) AS a,
+					COUNT( t1.orders ) AS b, COUNT(
+					IF
+						(
+							t1.orders > 1,
+							t1.orders,
+						NULL 
+						) 
+					) / COUNT( t1.orders )
+				FROM
+					(
+					SELECT YEAR
+						( InvoiceDate ) AS yr,
+						MONTH ( InvoiceDate ) AS mt,
+						CustomerId,
+						COUNT( DISTINCT InvoiceNo ) AS orders 
+					FROM
+						OnlineRetail 
+					GROUP BY
+						YEAR ( InvoiceDate ),
+						MONTH ( InvoiceDate ),
+						CustomerId 
+					) AS t1 
+				GROUP BY
+					yr,
+					mt
+				"""
             self.cursor.execute(sql_fugou)
             resinfo = self.cursor.fetchall()
             # 需要讲数据转换后返回给页面-ajax

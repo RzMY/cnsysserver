@@ -2,6 +2,7 @@
 import tornado.web
 
 # 所有请求都会通过这个基类来检查
+
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
         print("Error:{}".format(status_code))

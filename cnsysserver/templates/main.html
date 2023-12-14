@@ -913,7 +913,7 @@
             }
         });
         // 默认渲染复购率的echarts报表
-        $('.menu-item[data-target="main1"]').click();
+        $('.menu-item[data-target="main3"]').click();
     });
 </script>
 <script>
@@ -923,5 +923,15 @@
     $('#profile').click(function(){
         self.location='/profile';
     })
+    setInterval(function() {
+        $.ajax({
+            url:'/heartbeat',
+            type:'post',
+            data:{
+                _xsrf:$("input[name='_xsrf']").val()
+            }
+        })
+    }, 6000);  // 每6秒发送一次请求
+
 </script>
 </html>
